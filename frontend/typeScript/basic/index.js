@@ -1,3 +1,6 @@
+"use strict";
+exports.__esModule = true;
+var something = require("./test");
 var obj1 = /** @class */ (function () {
     function obj1(title, text) {
         this.title = title;
@@ -12,3 +15,4 @@ var test = new obj1("title", "name");
 test.printSomething();
 var stringExample = "hello";
 console.log(stringExample + " with a side of variable!");
+console.log(something);

@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "codeCoreTemplate"
+    "url": "https://github.com/binyata/coreCodeTemplate.git"
   },
   "author": "Ryan Lee",
   "license": "ISC"

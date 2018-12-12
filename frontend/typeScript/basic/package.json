@@ -1,0 +1,15 @@
+{
+  "name": "basic",
+  "version": "1.0.0",
+  "description": "simple typescript that runs through script call on html file",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "codeCoreTemplate"
+  },
+  "author": "Ryan Lee",
+  "license": "ISC"
+}

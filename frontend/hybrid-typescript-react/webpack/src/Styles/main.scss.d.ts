@@ -1,0 +1,1 @@
+export const oneTest: string;

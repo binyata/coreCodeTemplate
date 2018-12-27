@@ -1,18 +1,28 @@
 import * as React from 'react'
 import logo from 'Images/logo.jpg'
 import * as styles from 'Styles/main.scss'
-import { Link, Redirect } from 'react-router-dom'
-import { loginAction, generalStoreTask } from './LoginActions'
+import { loginCall, generalStoreTask } from './LoginActions'
+import { connect } from 'react-redux';
 
-export class Login extends React.Component<{}, { username: string, password: string, buttonIsDisabled: string, loggedIn: boolean }> {
+interface loginProps {
+    testPropToDeleteLater: any,
+    login: any
+}
+
+interface loginState {
+    username: string, 
+    password: string, 
+    buttonIsDisabled: boolean, 
+}
+
+class Login extends React.Component<loginProps, loginState> {
 
     constructor(props: any) {
         super(props)
         this.state = {
             username: '',
             password: '',
-            buttonIsDisabled: "disabled",
-            loggedIn: false
+            buttonIsDisabled: true,
         }
         this.onChangeUsernameInput = this.onChangeUsernameInput.bind(this)
         this.onChangePasswordInput = this.onChangePasswordInput.bind(this)
@@ -20,73 +30,79 @@ export class Login extends React.Component<{}, { username: string, password: str
     }
 
     private onChangeUsernameInput(e: { target: HTMLInputElement; }): void {
-        this.setState({ username: e.target.value })
+        this.setState({ username: e.target.value, buttonIsDisabled: false })
     }
     private onChangePasswordInput(e: { target: HTMLInputElement; }): void {
-        this.setState({ password: e.target.value })
+        this.setState({ password: e.target.value, buttonIsDisabled: false })
     }
     private loginClick(e: any): void {
         console.log("logging in...")
-        console.log(this.state)
-        //this.setState({ loggedIn: true })
-        // Look for best practices on clearing form on submit.
         // let submittedUserName: string = this.state.username
         // let submittedPassword: string = this.state.password
-        let submittedUserName: string = 'thomaslee'
-        let submittedPassword: string = '1Starcraftnerd!'
+        let submission: any = {username:"thomaslee", password:"1Starcraftnerd!"}
+        //this.props.login({username:this.state.username, password:this.state.password})
+        this.props.login(submission)
         this.setState({
             username: '',
             password: '',
-            buttonIsDisabled: "",
-        })
-        // better to run the logical operations on the API side
-        loginAction(submittedUserName, submittedPassword).then(res => {
-            console.log('successful')
-            this.setState({
-                buttonIsDisabled: "disabled",
-                loggedIn: true,
-            })
-            generalStoreTask(res)
-        }).catch(error => {
-            console.log('failed')
-            // more error logic...
-            console.log(error)
-            this.setState({
-                buttonIsDisabled: "disabled",
-            })
+            buttonIsDisabled: true,
         })
     }
  
     render() {
         const { username, password, buttonIsDisabled } = this.state
-        if (this.state.loggedIn) {
-            console.log("you have successfully logged in!")
-            return <Redirect to='/test' />
-        }
+        const { testPropToDeleteLater, login } = this.props
         return (
-            <div className={styles.oneTest}>
-                <img src={logo} />
-                <input 
-                    type="field" 
-                    placeholder="username"
-                    name="username"
-                    value={username}
-                    onChange={this.onChangeUsernameInput}
-                    autoComplete="current-user"
-                />
-                <input 
-                    type="password" 
-                    placeholder="password"
-                    name="password"
-                    value={password}
-                    onChange={this.onChangePasswordInput}
-                    autoComplete="current-password"
-                />
-                <button 
-                    disabled={!buttonIsDisabled}
-                    onClick={this.loginClick}>Login
-                </button>
+            <div className={styles.loginFormBackground}>
+                <div className={styles.formLayout}>
+                    <input 
+                        type="field" 
+                        placeholder="username"
+                        name="username"
+                        value={username}
+                        onChange={this.onChangeUsernameInput}
+                        autoComplete="current-user"
+                    />
+                    <input 
+                        type="password" 
+                        placeholder="password"
+                        name="password"
+                        value={password}
+                        onChange={this.onChangePasswordInput}
+                        autoComplete="current-password"
+                    />
+                    <button disabled={buttonIsDisabled} onClick={this.loginClick}>Login</button>
+                </div>
+                <div className={styles.logoLayout}>
+                    Powered by Edge Ascential 2019 &nbsp;&nbsp;
+                    <img src={logo} width="90" height="90" />
+                </div>
             </div>
         )
     }
 }
+
+function mapStateToProps(state: any, ownProps: any) {
+    return {
+      testPropToDeleteLater: state.generalStorage.test,
+    }
+}
+  
+function mapDispatchToProps(dispatch: any, ownProps: any) {
+    return {
+        login: (auth: {username: string, password:string}) => {
+            dispatch(loginCall(auth.username, auth.password)).then((response: any) => {
+                console.log("GREETINGS!")
+            })
+        }
+    }
+}
+
+// First have you component name not being with Uppercase 
+// letter and second remove the export default from the component,
+// otherwise when you will be importing it as default you wouldn't
+// be using the component that you have connected the store with
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Login)

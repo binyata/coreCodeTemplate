@@ -10,6 +10,7 @@ export const appReducer = combineReducers({
 export const rootReducer = (state: any, action: any) => {
   if (action.type === USER_LOGOUT) {
     state = undefined;
+    console.log("Why is this being called?")
   }
   return appReducer(state, action)
 }

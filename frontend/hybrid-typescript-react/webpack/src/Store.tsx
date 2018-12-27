@@ -1,17 +1,20 @@
 // Initialize store and have logout functionality
 import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
+import thunkMiddleware from 'redux-thunk';
+import { createLogger } from 'redux-logger';
 import { rootReducer } from './RootReducer'
-// window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-// OIDC stuff is here too, but will worry about when auth is being used.
+
+const loggerMiddleware = createLogger();
+const middleware = process.env.NODE_ENV !== 'production'
+  ? [ thunkMiddleware, loggerMiddleware ]
+  : [ thunkMiddleware ];
+
+const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const initialState = {};
-const middleware = [thunk];
 const myStore = createStore(
   rootReducer,
   initialState,
-  compose(
-    applyMiddleware(...middleware)
-  )
+  composeEnhancers(applyMiddleware(...middleware))
 );
 
 export default myStore

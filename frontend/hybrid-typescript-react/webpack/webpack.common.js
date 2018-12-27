@@ -71,7 +71,8 @@ module.exports = {
                       camelCase: true,
                       sass: true
                   }
-              }
+              },
+              'sass-loader'
             ]
           },
           {

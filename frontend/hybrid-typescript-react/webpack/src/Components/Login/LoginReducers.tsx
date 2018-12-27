@@ -6,6 +6,9 @@ import {
   SETUP_OCR_USER,
   SETUP_OCR_JWTS,
   SETUP_OCR_TOKENS,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
   SETUP_OCR_CATALOG_ATTRIBUTES_REQUEST,
   SETUP_OCR_CATALOG_ATTRIBUTES_SUCCESS,
   SETUP_OCR_CATALOG_ATTRIBUTES_FAILURE,
@@ -23,8 +26,30 @@ import {
 import {createRequestReducer} from 'CustomReducer'
 import appReducer from 'store'
 
-export const setupLoginInfo = {
+export const test = (state = {}, action: any) => {
+  return {
+    something: 1,
+    something1: 2,
+    something2: 3,
+    something3: 4
+  }
+}
 
+export const loginRequest = createRequestReducer({
+  FETCH_REQUEST: LOGIN_REQUEST,
+  FETCH_SUCCESS: LOGIN_SUCCESS,
+  FETCH_FAILURE: LOGIN_FAILURE,
+  initialState: []
+});
+
+export const isAuth = (state = { authStatus: false }, action: any) => {
+  switch (action.type) {
+    case LOGIN_SUCCESS:
+      return { authStatus: true }
+    case LOGIN_FAILURE:  
+    default:
+      return state;
+  }
 }
 
 export const setupOcrCatalog = createRequestReducer({
@@ -60,6 +85,9 @@ const generalStorage = combineReducers({
   setupOcrClientColors,
   setupOcrPromoTypes,
   setupOcrSubscriptions,
+  test,
+  loginRequest,
+  isAuth
 });
 
 export default generalStorage;

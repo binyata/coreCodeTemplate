@@ -9,7 +9,11 @@ const path = require('path');
 module.exports = merge(common, {
     output: {
         // helps speed up typescript compiling.
+        filename: '[name].[hash].js',
+        chunkFilename: '[name].[hash].js',
+        path: path.resolve(__dirname, 'dist'),
         pathinfo: false,
+        publicPath: '/'
     },
     mode: 'development',
     devtool: 'inline-source-map',

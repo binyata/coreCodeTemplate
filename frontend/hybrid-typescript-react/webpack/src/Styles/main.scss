@@ -15,6 +15,7 @@ body {
     max-width: 700px;
     max-height: 450px;
     background-color: $login-form-background-color;
+    box-shadow: 2px 2px #888888;
 }
 
 .form-layout {
@@ -34,6 +35,7 @@ body {
         font-size: 25px;
         border-radius: 5px;
         cursor: pointer;
+        margin-top: 170px;
         &:disabled {
             cursor: no-drop;
             border-radius: 5px;
@@ -43,7 +45,7 @@ body {
 }
 
 .logo-layout {
-    padding-top: 170px;
+    padding-top: 2px;
     float: right;
     color: #FFFFFF;
     img: {

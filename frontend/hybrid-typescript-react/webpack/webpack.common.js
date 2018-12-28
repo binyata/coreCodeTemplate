@@ -3,8 +3,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
-let FaviconsWebpackPlugin = require('favicons-webpack-plugin')
-
 const fileNameFormat = '[name]-[hash].[ext]';
 
 module.exports = {
@@ -30,15 +28,8 @@ module.exports = {
     */
       new webpack.WatchIgnorePlugin([
         /css\.d\.ts$/
-      ]),
+      ])
   ],
-  output: {
-    // filename: '[name].[contenthash].js',
-    // chunkFilename: '[name].[contenthash].js',
-    filename: '[name].[hash].js',
-    chunkFilename: '[name].[hash].js',
-    path: path.resolve(__dirname, 'dist')
-  },
   resolve: {
       extensions: ['.tsx', '.ts', '.js', '.scss', '.css'],
       modules: [path.resolve(__dirname, 'src'), 'node_modules']
@@ -125,7 +116,43 @@ module.exports = {
                   }
               }],
               exclude: /node_modules/,
-          }
+          },
+            // {
+            // test: /\.(j|t)sx?$/,
+            // exclude: /node_modules/,
+            // use: [
+            // {
+            // loader: 'ts-loader',
+            // // loader: 'awesome-typescript-loader',
+            // // helps speed up typescript compiling.
+            // options: {
+            // transpileOnly: true,
+            // experimentalWatchApi: true,
+            // } 
+            // }, 
+            // {
+            // loader: "babel-loader",
+            // options: {
+            // cacheDirectory: true,
+            // babelrc: false,
+            // presets: [
+            // [
+            // "@babel/preset-env",
+            // { targets: { browsers: "last 2 versions" } } // or whatever your project requires
+            // ],
+            // "@babel/preset-typescript",
+            // "@babel/preset-react"
+            // ],
+            // plugins: [
+            // // plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript
+            // ["@babel/plugin-proposal-decorators", { legacy: true }],
+            // ["@babel/plugin-proposal-class-properties", { loose: true }],
+            // "react-hot-loader/babel"
+            // ]
+            // }
+            // }
+            // ]
+            // }
       ]
   },
   /*

@@ -1,101 +1,70 @@
-import * as React from 'react'
+import * as React from "react";
+import { hot } from "react-hot-loader";
+import { connect } from "react-redux";
 import {
-    Route,
-    Redirect,
     BrowserRouter as Router,
+    Route,
     RouteProps,
-    Switch
-  } from 'react-router-dom';
-import Login from "./Login/Login"
-import { Home } from "./Home/Home"
-import { NoMatch } from "./NoMatch"
-import { connect } from 'react-redux'
+    Switch,
+  } from "react-router-dom";
+import Home from "./Home/Home";
+import Login from "./Login/Login";
+import { NoMatch } from "./NoMatch";
+import ProtectedRoute from "./ProtectedRoute";
 
 export interface ProtectedRouteProps extends RouteProps {
-    isAuthenticated: boolean;
     authenticationPath: string;
+    isAuthenticated: boolean;
 }
 
-export class ProtectedRoute extends Route<ProtectedRouteProps> {
-    public render() {
-        let redirectPath: string = '';
-        if (!this.props.isAuthenticated) {
-            redirectPath = this.props.authenticationPath;
-        }
-        if (redirectPath) {
-            const renderComponent = () => (<Redirect to={{pathname: redirectPath}}/>);
-            return <Route {...this.props} component={renderComponent} render={undefined}/>;
-        } else {
-            return <Route {...this.props}/>;
-        }
-    }
+interface AppProps {
+    isAuth: boolean;
 }
 
-interface appProps {
-    isAuth: boolean
-}
-
-interface appState {
+interface AppState {
     defaultProtectedRouteProps: ProtectedRouteProps;
 }
 
-class App extends React.Component<appProps, appState> {
-    constructor(props:any ) {
-        super(props)
+class App extends React.Component<AppProps, AppState> {
+    constructor(props: any ) {
+        super(props);
         this.state = {
             defaultProtectedRouteProps: {
+                authenticationPath: "/login",
                 isAuthenticated: this.props.isAuth,
-                authenticationPath: '/login'
-            }
+            },
+        };
+    }
+    public componentWillMount() { return true; }
+    public componentDidMount() { return true; }
+    public componentWillReceiveProps(newProps: any) { return true; }
+    public shouldComponentUpdate(newProps: any, newState: any) { return true; }
+    public componentDidUpdate(prevProps: any, prevState: any) { return true; }
+    public componentWillUnmount() { return true; }
+    public componentWillUpdate(nextProps: any, nextState: any) {
+        if (this.props.isAuth !== nextProps.isAuth) {
+            this.setState({
+                defaultProtectedRouteProps:
+                {
+                    authenticationPath: "/login",
+                    isAuthenticated: nextProps.isAuth,
+                },
+            });
         }
     }
-    componentWillMount() {
-        console.log('Component WILL MOUNT!')
-     }
-     componentDidMount() {
-        console.log('Component DID MOUNT!')
-     }
-     componentWillReceiveProps(newProps: any) {    
-        console.log('Component WILL RECIEVE PROPS!')
-        console.log(newProps)
-     }
-     shouldComponentUpdate(newProps: any, newState: any) {
-        return true;
-     }
-     componentWillUpdate(nextProps: any, nextState: any) {
-        console.log('Component WILL UPDATE!');
-        console.log(nextProps)
-        console.log(nextState)
-
-        if (this.props.isAuth !== nextProps.isAuth) {
-            this.setState({ defaultProtectedRouteProps: 
-                {
-                    isAuthenticated: nextProps.isAuth,
-                    authenticationPath: '/login'
-                }
-            })
-        }
-     }
-     componentDidUpdate(prevProps: any, prevState: any) {
-        console.log('Component DID UPDATE!')
-        console.log(prevProps)
-        console.log(prevState)
-     }
-     componentWillUnmount() {
-        console.log('Component WILL UNMOUNT!')
-     }
-    render() {
-        console.log(this.state.defaultProtectedRouteProps)
+    public render() {
+        console.log(this.props)
         return (
             <div>  
                 <main>
                     <Router>
                         <Switch>
+                            <Route exact path="/public" component={Home} />
                             <Route exact path="/login" component={Login}/>
                             <ProtectedRoute
                                 {...this.state.defaultProtectedRouteProps}
                                 exact={true}
-                                path='/'
+                                path="/"
                                 component={Home}
                             />
                             <Route component={NoMatch} />
@@ -109,10 +78,10 @@ class App extends React.Component<appProps, appState> {
 
 function mapStateToProps(state: any, ownProps: any) {
     return {
-        isAuth: state.generalStorage.isAuth.authStatus
-    }
+        isAuth: state.generalStorage.isAuth.authStatus,
+    };
 }
 
 export default connect(
-    mapStateToProps
-)(App)
+    mapStateToProps,
+)(App);

@@ -1,37 +1,36 @@
-import { any } from "prop-types";
-
-export function createRequestReducer(obj: { FETCH_REQUEST:any, FETCH_SUCCESS:any, FETCH_FAILURE:any, initialState:any }) {
-    return function(state: any = {
-        type: null,
+export function createRequestReducer(
+    obj: { FETCH_REQUEST: any, FETCH_SUCCESS: any, FETCH_FAILURE: any, initialState: any },
+  ) {
+    return (state: any = {
         isFetching: false,
         response: obj.initialState,
-        status: null
-      }, action: any) {
+        status: null,
+        type: null,
+      }, action: any) => {
         switch (action.type) {
           case obj.FETCH_REQUEST:
             return {
-              type: action.type,
               isFetching: true,
               response: obj.initialState,
-              status: null
+              status: null,
+              type: action.type,
             };
           case obj.FETCH_SUCCESS:
             return {
-              type: action.type,
               isFetching: false,
               response: action.response,
-              status: 'success'
+              status: "success",
+              type: action.type,
             };
           case obj.FETCH_FAILURE:
             return {
-              type: action.type,
               isFetching: false,
               response: action.response,
-              status: 'error'
+              status: "error",
+              type: action.type,
             };
           default:
             return state;
         }
       };
   }
-  
